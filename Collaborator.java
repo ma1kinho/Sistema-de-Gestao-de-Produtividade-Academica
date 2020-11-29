@@ -1,13 +1,14 @@
 package entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Collaborator {
 	private String name;
 	private String email;
 	private String cargo;
-	private List<Project> projects;
-	private Publication publications;
+	private List<Project> projects = new ArrayList<>();
+	private List<AcademicProduction> academicProductions = new ArrayList<>();
 	
 	public Collaborator() {
 	}
@@ -41,14 +42,20 @@ public abstract class Collaborator {
 	public void setCargo(String cargo) {
 		this.cargo = cargo;
 	}
-
-	public Publication getPublications() {
-		return publications;
+	
+	public List<Project> getProjects() {
+		return projects;
 	}
 
-	public void setPublications(Publication publications) {
-		this.publications = publications;
+	public void addProjectToCollaborator(Project project) {
+		projects.add(project);
 	}
 	
+	public void addAcademicProductionToCollaborator(AcademicProduction academicProduction) {
+		academicProductions.add(academicProduction);
+	}
 	
+	public String toString() {
+		return "Nome: " + name + "\nE-mail: " + email;
+	}
 }

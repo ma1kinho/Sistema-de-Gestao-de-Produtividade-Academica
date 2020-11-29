@@ -12,6 +12,7 @@ import entities.Collaborator;
 import entities.DoctoralStudent;
 import entities.GraduationStudent;
 import entities.MasterStudent;
+import entities.Orientation;
 import entities.Project;
 import entities.Publication;
 import entities.Researcher;
@@ -36,6 +37,7 @@ public class Prog {
 			System.out.println("[3] - Concluir um projeto");
 			System.out.println("[4] - Criar uma publicacao");
 			System.out.println("[5] - Criar uma observacao");
+			System.out.println("[6] - Consultar colaborador");
 			System.out.print("=> ");
 
 			option = sc.nextInt();
@@ -43,7 +45,7 @@ public class Prog {
 
 			switch (option) {
 			case 1:
-				System.out.print("Digite o titulo do projeto: ");
+				System.out.print("Digite o titulo do projeto a ser elaborado: ");
 				//sc.nextLine();
 				String titleProject = sc.nextLine();
 				System.out.print("Data de inicio (DD/MM/YYYY): ");
@@ -67,7 +69,8 @@ public class Prog {
 
 				Project project = new Project(titleProject, startDate, endDate, financeAgency, financedAmount,
 						objective, description);
-
+				
+				Collaborator participant;
 				for (int i = 0; i < qntParticipants; i++) {
 					System.out.println();
 					System.out.println("Dados do participante numero #" + (i + 1) + ":");
@@ -80,22 +83,51 @@ public class Prog {
 							+ "3 - aluno de doutorado\n4 - professor\n5 - pesquisador\n=> ");
 					int numCargo = sc.nextInt();
 					sc.nextLine();
-					Collaborator participant;
-
+					participant = SearchCollaborator(listProjects, name);
+					
 					if (numCargo == 1) {
-						participant = new GraduationStudent(name, email, "aluno de graduação");
+						if(participant == null) {
+							participant = new GraduationStudent(name, email);
+							project.addParticipant(participant);
+							participant.addProjectToCollaborator(project);
+						} else {
+							int qntProjectsInElaboration = 0;
+							for(Project p : participant.getProjects()) {
+								if(p.getStatus().equals(ProjectStatus.IN_ELABORATION)) {
+									qntProjectsInElaboration += 1;
+								}
+							}
+							if(qntProjectsInElaboration >= 2) {
+								//System.out.println("Qnt: " + participant.getQntProjectsInElaboration());
+								System.out.println("Um aluno de graduação não pode participar de "
+													+ "mais de dois projetos em andamento.\n");
+							} else {
+								project.addParticipant(participant);
+								participant.addProjectToCollaborator(project);
+							}
+						}
 					} else if (numCargo == 2) {
-						participant = new MasterStudent(name, email, "aluno de mestrado");
+						if(participant == null) {
+							participant = new MasterStudent(name, email);
+						}
+						project.addParticipant(participant);
 					} else if (numCargo == 3) {
-						participant = new DoctoralStudent(name, email, "aluno de doutorado");
+						if(participant == null) {
+							participant = new DoctoralStudent(name, email);
+						}
+						project.addParticipant(participant);
 					} else if (numCargo == 4) {
-						participant = new Teacher(name, email, "professor");
+						if(participant == null) {
+							participant = new Teacher(name, email);
+						}
 						qntTeachers += 1;
+						project.addParticipant(participant);
 					} else {
-						participant = new Researcher(name, email, "pesquisador");
+						if(participant == null) {
+							participant = new Researcher(name, email);
+						}
+						project.addParticipant(participant);
 					}
-
-					project.addParticipant(participant);
 
 					if (i == qntParticipants - 1 && qntTeachers == 0) {
 						System.out.println();
@@ -111,7 +143,6 @@ public class Prog {
 
 			case 2:
 				System.out.print("Digite o titulo do projeto a ser iniciado: ");
-				//sc.nextLine();
 				titleProject = sc.nextLine();
 				Project projectAux = SearchProject(listProjects, titleProject);
 
@@ -137,6 +168,33 @@ public class Prog {
 				break;
 
 			case 3:
+				System.out.print("Digite o titulo do projeto a ser concluido: ");
+				titleProject = sc.nextLine();
+				projectAux = SearchProject(listProjects, titleProject);
+				
+				while (projectAux == null) {
+					System.out.println("O projeto nao existe! Tente novamente.\n");
+					System.out.print("Digite o nome do projeto a ser concluido: ");
+					titleProject = sc.nextLine();
+					projectAux = SearchProject(listProjects, titleProject);
+				}
+				
+				int qntPub = 0;
+				for(AcademicProduction ap : projectAux.getAcademicProduction()) {
+					if(ap instanceof Publication) {
+						qntPub++;
+						break;
+					}
+				}
+				
+				if(qntPub == 0) {
+					System.out.println("Para o projeto ser concluido devem "
+							+ "existir publicações associadas a ele.\n");
+				} else {
+					projectAux.setStatus(ProjectStatus.FINISHED);
+					System.out.println("Projeto concluido com sucesso!\n");
+				}
+				
 				break;
 
 			case 4:
@@ -153,7 +211,7 @@ public class Prog {
 				System.out.print("Quantos autores a publicacao tem? ");
 				int qntAuthors = sc.nextInt();			
 				sc.nextLine();
-				System.out.println("Nomes dos autores:");
+				System.out.println();
 				for(int i=0; i<qntAuthors; i++) {
 					System.out.println("Autor #" + (i + 1) + ": ");
 					System.out.print("Nome: ");
@@ -166,9 +224,9 @@ public class Prog {
 					} else {
 						System.out.println("Autor nao foi encontrado!");
 					}
-					publication.addAuthor(collaboratorAux);
+					collaboratorAux.addAcademicProductionToCollaborator(publication);;
 				}
-						
+				
 				System.out.print("A publicacao possui algum projeto de pesquisa associado (s/n)? ");
 				char choice = sc.next().charAt(0);
 
@@ -187,7 +245,7 @@ public class Prog {
 							
 					if (projectAux.getStatus() != ProjectStatus.IN_PROGRESS) {
 						System.out.println("\nUma publicação só poderá ser associada a um projeto"
-								+ "quando o status do projeto estiver 'Em andamento'\n");
+								+ " quando o status do projeto estiver 'Em andamento'\n");
 					} else {
 						projectAux.addAcademicProduction(publication);
 					}
@@ -198,8 +256,76 @@ public class Prog {
 				break;
 				
 			case 5:
+				System.out.print("Digite a descricao da orientacao: ");
+				String descriptionOfOrientation = sc.nextLine();
+				System.out.print("Ano da orientacao: ");
+				int yearOfOrientation = sc.nextInt();
+				System.out.print("Quantidade de tarefas a serem seguidas: ");
+				int qntTasks = sc.nextInt();
+				sc.nextLine();
+				String [] tasks = new String[qntTasks];
 				
-
+				System.out.println("Tarefas:");
+				for(int i=0; i<qntTasks; i++) {
+					System.out.print("Digite a tarefa #" + (i + 1) + ":");
+					tasks[i] = sc.nextLine();
+				}
+				
+				Orientation orientations = new Orientation(descriptionOfOrientation, yearOfOrientation,
+						qntTasks, tasks);
+				
+				System.out.print("Quantos professores fizeram as orientacoes? ");
+				int qntT = sc.nextInt();
+				sc.nextLine();
+				System.out.println();
+				for(int i=0; i<qntT; i++) {
+					System.out.println("Professor #" + (i + 1) + ":");
+					System.out.print("Nome: ");
+					String nameOfTeacher = sc.nextLine();
+					Collaborator collaboratorAux = SearchCollaborator(listProjects, nameOfTeacher);
+					
+					if(collaboratorAux == null) {
+						System.out.println("Professor nao encontrado.\n");
+					} else {
+						if(collaboratorAux instanceof Teacher) {
+							System.out.println("Professor encontrado com sucesso.");
+							collaboratorAux.addAcademicProductionToCollaborator(orientations);
+						} else {
+							System.out.println("As orientações devem ser feitas por professores.");
+						}
+					}
+					
+				}
+				
+				
+				
+				
+				break;
+				
+			case 6:
+				System.out.print("Digite o nome do colaborador a ser consultado: ");
+				String name = sc.nextLine();
+				
+				Collaborator collaboratorAux = SearchCollaborator(listProjects, name);
+				
+				while (collaboratorAux == null) {
+					System.out.println("O colaborador nao existe! Tente novament.");
+					name = sc.nextLine();
+					collaboratorAux = SearchCollaborator(listProjects, name);
+				}
+				
+				System.out.println("Colaborador encontrado com sucesso!");
+				System.out.println("Dados do colaborador:");
+				System.out.println(collaboratorAux);
+				
+				
+				
+				break;
+				
+			case 7:
+				Collaborator c = new GraduationStudent("Alex", "a@gmail.com");
+				System.out.println(c);
+				
 			default:
 			}
 
