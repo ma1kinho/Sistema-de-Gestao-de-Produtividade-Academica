@@ -1,12 +1,13 @@
 package entities;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import entities.enums.ProjectStatus;
 
-public class Project {
+public class Project implements Comparable<Project> {
 	private String title;
 	private Date startDate;
 	private Date endDate;
@@ -17,12 +18,13 @@ public class Project {
 	private List<Collaborator> participants = new ArrayList<>();
 	private ProjectStatus status = ProjectStatus.IN_ELABORATION;
 	private List<AcademicProduction> academicProductions = new ArrayList<>();
+	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	
 	public Project() {
 	}
 
 	public Project(String title, Date startDate, Date endDate, String financeAgency, 
-			Double financedAmount, String objective, String description) {
+					Double financedAmount, String objective, String description) {
 		this.title = title;
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -111,4 +113,33 @@ public class Project {
 	public void addAcademicProduction(AcademicProduction academicProduction) {
 		academicProductions.add(academicProduction);
 	}
+	
+	@Override
+	public int compareTo(Project project) {
+		if(this.endDate.after(project.getEndDate())) {
+			return -1;
+		} else if(this.endDate.before(project.getEndDate())) {
+			return 1;
+		}
+		return 0;
+	}
+	public String projectDate() {
+		return "Titulo do projeto: " + title + "\nData de inicio: " + sdf.format(endDate) + 
+				"\nData de termino: " + sdf.format(endDate);
+	}
+	
+	public void printAcademicProductionOfProject() {
+		
+	}
+	
+	public String toString() {
+		return "Titulo do projeto: " + title +
+			   "\nData de inicio: " + sdf.format(startDate) +
+			   "\nData de termino: " + sdf.format(endDate) +
+			   "\nAgencia financiadora: " + financeAgency +
+			   "\nValor financiado: " + financedAmount +
+			   "\nObjetivo do projeto: " + objective +
+			   "\nDescricao do projeto: " + description;
+	}
 }
+

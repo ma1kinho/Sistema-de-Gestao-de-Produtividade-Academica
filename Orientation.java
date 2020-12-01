@@ -38,8 +38,9 @@ public class Orientation extends AcademicProduction {
 	public void setTasks(String[] tasks) {
 		this.tasks = tasks;
 	}
-
+	
 	public String toString() {
-		return null;
+		return "Descricao da orientacao: " + description + 
+				"\nAno que a orientacao foi feita: " + year;
 	}
 }

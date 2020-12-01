@@ -3,6 +3,7 @@ package applicaion;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -26,6 +27,7 @@ public class Prog {
 		Scanner sc = new Scanner(System.in);
 
 		List<Project> listProjects = new ArrayList<>();
+		List<Collaborator> listCollaborators = new ArrayList<>();
 
 		int option;
 
@@ -37,7 +39,10 @@ public class Prog {
 			System.out.println("[3] - Concluir um projeto");
 			System.out.println("[4] - Criar uma publicacao");
 			System.out.println("[5] - Criar uma observacao");
-			System.out.println("[6] - Consultar colaborador");
+			System.out.println("[6] - Consultar um colaborador");
+			System.out.println("[7] - Consultar um projeto");
+			System.out.println("[8] - Obter relatorio de producao academica do laboratorio");
+			System.out.println("[9] - Testes");
 			System.out.print("=> ");
 
 			option = sc.nextInt();
@@ -83,13 +88,14 @@ public class Prog {
 							+ "3 - aluno de doutorado\n4 - professor\n5 - pesquisador\n=> ");
 					int numCargo = sc.nextInt();
 					sc.nextLine();
-					participant = SearchCollaborator(listProjects, name);
+					participant = SearchCollaborator(listCollaborators, name);
 					
 					if (numCargo == 1) {
 						if(participant == null) {
 							participant = new GraduationStudent(name, email);
 							project.addParticipant(participant);
 							participant.addProjectToCollaborator(project);
+							listCollaborators.add(participant);
 						} else {
 							int qntProjectsInElaboration = 0;
 							for(Project p : participant.getProjects()) {
@@ -98,12 +104,12 @@ public class Prog {
 								}
 							}
 							if(qntProjectsInElaboration >= 2) {
-								//System.out.println("Qnt: " + participant.getQntProjectsInElaboration());
 								System.out.println("Um aluno de graduação não pode participar de "
 													+ "mais de dois projetos em andamento.\n");
 							} else {
 								project.addParticipant(participant);
 								participant.addProjectToCollaborator(project);
+								listCollaborators.add(participant);
 							}
 						}
 					} else if (numCargo == 2) {
@@ -111,22 +117,30 @@ public class Prog {
 							participant = new MasterStudent(name, email);
 						}
 						project.addParticipant(participant);
+						participant.addProjectToCollaborator(project);
+						listCollaborators.add(participant);
 					} else if (numCargo == 3) {
 						if(participant == null) {
 							participant = new DoctoralStudent(name, email);
 						}
 						project.addParticipant(participant);
+						participant.addProjectToCollaborator(project);
+						listCollaborators.add(participant);
 					} else if (numCargo == 4) {
 						if(participant == null) {
 							participant = new Teacher(name, email);
 						}
 						qntTeachers += 1;
 						project.addParticipant(participant);
+						participant.addProjectToCollaborator(project);
+						listCollaborators.add(participant);
 					} else {
 						if(participant == null) {
 							participant = new Researcher(name, email);
 						}
 						project.addParticipant(participant);
+						participant.addProjectToCollaborator(project);
+						listCollaborators.add(participant);
 					}
 
 					if (i == qntParticipants - 1 && qntTeachers == 0) {
@@ -217,14 +231,15 @@ public class Prog {
 					System.out.print("Nome: ");
 					String name = sc.nextLine();
 					
-					Collaborator collaboratorAux = SearchCollaborator(listProjects, name);
+					Collaborator collaboratorAux = SearchCollaborator(listCollaborators, name);
 					
 					if(collaboratorAux != null) {
 						System.out.println("Autor encontrado com sucesso!");
+						collaboratorAux.addAcademicProductionToCollaborator(publication);
 					} else {
 						System.out.println("Autor nao foi encontrado!");
 					}
-					collaboratorAux.addAcademicProductionToCollaborator(publication);;
+					
 				}
 				
 				System.out.print("A publicacao possui algum projeto de pesquisa associado (s/n)? ");
@@ -248,6 +263,7 @@ public class Prog {
 								+ " quando o status do projeto estiver 'Em andamento'\n");
 					} else {
 						projectAux.addAcademicProduction(publication);
+						publication.projectAssociation(projectAux);
 					}
 				} else {
 					nonAssociatedPublications.add(publication);
@@ -282,7 +298,7 @@ public class Prog {
 					System.out.println("Professor #" + (i + 1) + ":");
 					System.out.print("Nome: ");
 					String nameOfTeacher = sc.nextLine();
-					Collaborator collaboratorAux = SearchCollaborator(listProjects, nameOfTeacher);
+					Collaborator collaboratorAux = SearchCollaborator(listCollaborators, nameOfTeacher);
 					
 					if(collaboratorAux == null) {
 						System.out.println("Professor nao encontrado.\n");
@@ -297,34 +313,102 @@ public class Prog {
 					
 				}
 				
-				
-				
-				
 				break;
 				
 			case 6:
 				System.out.print("Digite o nome do colaborador a ser consultado: ");
 				String name = sc.nextLine();
 				
-				Collaborator collaboratorAux = SearchCollaborator(listProjects, name);
+				Collaborator collaboratorAux = SearchCollaborator(listCollaborators, name);
 				
 				while (collaboratorAux == null) {
-					System.out.println("O colaborador nao existe! Tente novament.");
+					System.out.println("O colaborador nao existe! Tente novamente.");
 					name = sc.nextLine();
-					collaboratorAux = SearchCollaborator(listProjects, name);
-				}
+					collaboratorAux = SearchCollaborator(listCollaborators, name);
+				}			
 				
+				Collections.sort(listProjects);
+				Collections.sort(collaboratorAux.getAcademicProductions());
 				System.out.println("Colaborador encontrado com sucesso!");
-				System.out.println("Dados do colaborador:");
+				System.out.println("Informacoes do colaborador:");
 				System.out.println(collaboratorAux);
-				
-				
-				
+				collaboratorAux.printCollaboratorProjects();
+						
 				break;
 				
 			case 7:
-				Collaborator c = new GraduationStudent("Alex", "a@gmail.com");
-				System.out.println(c);
+				System.out.print("Digite o titulo do projeto a ser consultado:");
+				titleProject = sc.nextLine();
+				
+				projectAux = SearchProject(listProjects, titleProject);
+				
+				while(projectAux == null) {
+					System.out.println("O projeto nao existe! Tente novamente.");
+					titleProject = sc.nextLine();
+					projectAux = SearchProject(listProjects, titleProject);
+				}
+				
+				System.out.println("Projeto encontrado com sucesso!");
+				System.out.println("Dados do projeto:");
+				System.out.println(projectAux);
+				System.out.println("Colaboradores alocados no projeto:");
+				for(Collaborator col : projectAux.getParticipants()) {
+					System.out.println(col.getName());
+				}
+				Collections.sort(projectAux.getAcademicProduction());
+				for(AcademicProduction ap : projectAux.getAcademicProduction()) {
+					System.out.println(ap);
+				}
+					
+				break;
+				
+			case 8:
+				System.out.println("Numero de colaboradores: " + listCollaborators.size());
+				
+				int qntPIE = 0;
+				int qntPIP = 0;
+				int qntPF = 0;
+				for(Project p : listProjects) {
+					if(p.getStatus().equals(ProjectStatus.IN_ELABORATION)) qntPIE += 1;
+					if(p.getStatus().equals(ProjectStatus.IN_PROGRESS)) qntPIP += 1;
+					if(p.getStatus().equals(ProjectStatus.FINISHED)) qntPF += 1;
+				}
+				System.out.println("Numero de projetos em elaboracao: " + qntPIE);
+				System.out.println("Numero de projetos em andamento: " + qntPIP);
+				System.out.println("Numero de projetos concluidos: " + qntPF);
+				System.out.println("Numero total de projetos: " + (qntPIE + qntPIP + qntPF));
+				
+				int qntPubl = 0;
+				int qntOrient = 0;
+				for(Project p : listProjects) {
+					for(AcademicProduction ap : p.getAcademicProduction()) {
+						if(ap instanceof Publication) qntPubl += 1;
+					    if(ap instanceof Orientation) qntOrient += 1;
+					}
+				}
+				System.out.println("Numero de publicacoes: " + qntPubl);
+				System.out.println("Numero de orientacoes: " + qntOrient);
+				
+				break;
+				
+			case 9:
+				Date data = sdf.parse("10/06/2001");
+				System.out.println("Data parse: " + sdf.format(data));
+					
+				/*for(Project p : listProjects) {
+					System.out.println("Titulo: " + p.getTitle() + "\n");
+				}
+				Collections.sort(listProjects);
+				
+				
+				for(Project p : listProjects) {
+					System.out.println("Titulo: " + p.getTitle() + "\n");
+				}*/
+				/*System.out.print("Nome: ");
+				name = sc.nextLine();
+				Collaborator cc = SearchCollaborator(listProjects, name);
+				cc.printCollaboratorProjects();*/
+				
 				
 			default:
 			}
@@ -355,12 +439,10 @@ public class Prog {
 		return null;
 	}
 	
-	public static Collaborator SearchCollaborator(List<Project> listProjects, String name) {
-		for (Project p : listProjects) {
-			for (Collaborator c : p.getParticipants()) {
-				if(name.equals(c.getName())) {
-					return c;
-				}
+	public static Collaborator SearchCollaborator(List<Collaborator> listCollaborators, String name) {
+		for (Collaborator col : listCollaborators) {
+			if(name.equals(col.getName())) {
+				return col;
 			}
 		}
 		return null;

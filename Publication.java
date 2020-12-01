@@ -1,13 +1,9 @@
 package entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Publication  extends AcademicProduction {
 
 	private String title;
 	private String conferenceName;
-	private List<Collaborator> authors = new ArrayList<>();
 	
 	public Publication() {	
 	}
@@ -34,9 +30,9 @@ public class Publication  extends AcademicProduction {
 		this.conferenceName = conferenceName;
 	}
 	
-	@Override
 	public String toString() {
-		return  null;
+		return "Titulo da publicacao: " + title + "\nNome da conferencia onde foi publicada: " 
+				+ conferenceName + "\nAno da publicacao: " + year;	
 	}
 	
 }
