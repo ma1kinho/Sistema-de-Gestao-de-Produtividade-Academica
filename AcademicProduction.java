@@ -1,15 +1,17 @@
 package entities;
 
 public abstract class AcademicProduction implements Comparable<AcademicProduction> {
-
+	
+	protected String title;
 	protected Integer year;
 	protected Project associatedProject;
 	
 	public AcademicProduction() {
 	}
 	
-	public AcademicProduction(Integer year) {
+	public AcademicProduction(Integer year, String title) {
 		this.year = year;
+		this.title = title;
 	}
 	
 	public Integer getYear() {
@@ -18,6 +20,14 @@ public abstract class AcademicProduction implements Comparable<AcademicProductio
 
 	public void setYear(Integer year) {
 		this.year = year;
+	}
+	
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 	public Project getAssociatedProject() {
@@ -38,7 +48,5 @@ public abstract class AcademicProduction implements Comparable<AcademicProductio
 		return 0;
 	}
 	
-	@Override
 	public abstract String toString();
-	//public abstract void printAcademicProduction();
 }

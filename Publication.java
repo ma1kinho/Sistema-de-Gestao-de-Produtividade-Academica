@@ -1,16 +1,14 @@
 package entities;
 
-public class Publication  extends AcademicProduction {
+public class Publication extends AcademicProduction {
 
-	private String title;
 	private String conferenceName;
 	
 	public Publication() {	
 	}
 
 	public Publication(String title, String conferenceName, Integer year) {
-		super(year);
-		this.title = title;
+		super(year, title);
 		this.conferenceName = conferenceName;
 	}
 	
@@ -30,9 +28,9 @@ public class Publication  extends AcademicProduction {
 		this.conferenceName = conferenceName;
 	}
 	
+	@Override
 	public String toString() {
 		return "Titulo da publicacao: " + title + "\nNome da conferencia onde foi publicada: " 
 				+ conferenceName + "\nAno da publicacao: " + year;	
 	}
-	
 }

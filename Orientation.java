@@ -8,8 +8,8 @@ public class Orientation extends AcademicProduction {
 	public Orientation() {
 	}
 	
-	public Orientation(String description, Integer year, int qntTasks, String[] tasks) {
-		super(year);
+	public Orientation(String title, String description, Integer year, int qntTasks, String[] tasks) {
+		super(year, title);
 		this.description = description;
 		this.qntTasks = qntTasks;
 		this.tasks = tasks;
@@ -40,7 +40,6 @@ public class Orientation extends AcademicProduction {
 	}
 	
 	public String toString() {
-		return "Descricao da orientacao: " + description + 
-				"\nAno que a orientacao foi feita: " + year;
+		return "Descricao da orientacao: " + description + "\nAno que a orientacao foi feita: " + year;
 	}
 }

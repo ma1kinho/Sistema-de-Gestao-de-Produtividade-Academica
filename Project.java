@@ -38,56 +38,28 @@ public class Project implements Comparable<Project> {
 		return title;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
 	public Date getStartDate() {
 		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
 	}
 
 	public Date getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
 	public String getFinanceAgency() {
 		return financeAgency;
-	}
-
-	public void setFinanceAgency(String financeAgency) {
-		this.financeAgency = financeAgency;
 	}
 
 	public Double getFinancedAmount() {
 		return financedAmount;
 	}
 
-	public void setFinancedAmount(Double financedAmount) {
-		this.financedAmount = financedAmount;
-	}
-
 	public String getObjective() {
 		return objective;
 	}
 
-	public void setObjective(String objective) {
-		this.objective = objective;
-	}
-
 	public String getDescription() {
 		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public List<Collaborator> getParticipants() {
@@ -114,6 +86,15 @@ public class Project implements Comparable<Project> {
 		academicProductions.add(academicProduction);
 	}
 	
+	public boolean VerificProject() {
+		if (title != null && startDate != null && endDate != null && financeAgency != null 
+			&& financedAmount != null && objective != null && description != null && participants != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	@Override
 	public int compareTo(Project project) {
 		if(this.endDate.after(project.getEndDate())) {
@@ -123,6 +104,7 @@ public class Project implements Comparable<Project> {
 		}
 		return 0;
 	}
+	
 	public String projectDate() {
 		return "Titulo do projeto: " + title + "\nData de inicio: " + sdf.format(endDate) + 
 				"\nData de termino: " + sdf.format(endDate);
@@ -142,4 +124,3 @@ public class Project implements Comparable<Project> {
 			   "\nDescricao do projeto: " + description;
 	}
 }
-
