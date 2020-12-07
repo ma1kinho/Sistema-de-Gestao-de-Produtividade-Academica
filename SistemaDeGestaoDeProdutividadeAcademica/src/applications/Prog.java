@@ -403,19 +403,7 @@ public class Prog {
 				System.out.println();
 				
 				break;
-			case 10:
-				System.out.print("Digite (s/n): ");
-				char b = sc.next().charAt(0);
-				
-				if(b == 's') {
-					sc.nextLine();
-					String names = sc.nextLine();
-					System.out.println(names);
-				} else {
-					System.out.println("nn");
-				}
-				
-				break;
+	
 			default:
 			}
 
