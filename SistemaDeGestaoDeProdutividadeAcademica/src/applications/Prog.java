@@ -87,7 +87,7 @@ public class Prog {
 					participant = AllocCollaborator(listCollaborators, sc);
 					
 					if(participant instanceof GraduationStudent && participant.qntProjectsInElaboration() >= 2) {
-						System.out.println("Um aluno de graduacao nao pode participar de mais de dois projetos em andamento.\n");
+						System.out.println("Um aluno de graduação não pode participar de mais de dois projetos em andamento.\n");
 					} else {
 						if(participant instanceof Teacher) qntTeachers += 1;
 						project.addParticipant(participant);
@@ -127,7 +127,7 @@ public class Prog {
 					}
 				} else {
 					System.out.println("Um projeto so pode ser iniciado apenas se constarem"
-							+ " todas as informacoes basicas a respeito do projeto cadastradas.\n");
+							+ " todas as informações básicas a respeito do projeto cadastradas.\n");
 				}
 
 				break;
@@ -154,7 +154,7 @@ public class Prog {
 				
 				if(qntPub == 0) {
 					System.out.println("Para o projeto ser concluido devem "
-							+ "existir publicacoes associadas a ele.\n");
+							+ "existir publicações associadas a ele.\n");
 				} else {
 					projectAux.setStatus(ProjectStatus.FINISHED);
 					System.out.println("Projeto concluido com sucesso!\n");
@@ -167,7 +167,7 @@ public class Prog {
 				participant = AllocCollaborator(listCollaborators, sc);
 				
 				if(participant instanceof GraduationStudent && participant.qntProjectsInElaboration() >= 2) {
-					System.out.println("Um aluno de graduacao nao pode participar de mais de dois projetos em andamento.\n");
+					System.out.println("Um aluno de graduação não pode participar de mais de dois projetos em andamento.\n");
 					break;
 				}
 				
@@ -187,7 +187,7 @@ public class Prog {
 					participant.addProjectToCollaborator(projectAux);
 					System.out.println("Participante alocado com sucesso!\n");
 				} else {
-					System.out.println("A alocacao deve ser permitida apenas quando o projeto estiver 'em elaboracao'.\n");
+					System.out.println("A alocação deve ser permitida apenas quando o projeto estiver 'em elaboração'.\n");
 				}
 					
 				break;
@@ -241,7 +241,7 @@ public class Prog {
 					}
 							
 					if (projectAux.getStatus() != ProjectStatus.IN_PROGRESS) {
-						System.out.println("\nUma publicacao so podera ser associada a um projeto"
+						System.out.println("\nUma publicação só poderá ser associada a um projeto"
 										 + " quando o status do projeto estiver 'Em andamento'\n");
 					} else {
 						projectAux.addAcademicProduction(publication);
@@ -297,9 +297,10 @@ public class Prog {
 						System.out.println("Professor encontrado com sucesso!");
 						collaboratorAux.addAcademicProductionToCollaborator(orientations);
 					} else {
-						System.out.println("As orientacoes devem ser feitas por professores.");
+						System.out.println("As orientações devem ser feitas por professores.");
 					}
 				}
+				
 				
 				System.out.print("As orientacoes possuem algum projeto de pesquisa associado (s/n)? ");
 			    choice = sc.next().charAt(0);
@@ -337,7 +338,7 @@ public class Prog {
 					collaboratorAux = SearchCollaborator(listCollaborators, name);
 				}			
 				
-				Collections.sort(listProjects);
+				Collections.sort(collaboratorAux.getProjects());
 				Collections.sort(collaboratorAux.getAcademicProductions());
 				System.out.println("Colaborador encontrado com sucesso!");
 				System.out.println("INFORMACOES DO COLABORADOR");
@@ -437,7 +438,7 @@ public class Prog {
 			System.out.print("Email: ");
 			String email = sc.nextLine();
 			System.out.println("Qual o cargo de " + name + " no projeto?");
-			System.out.print("1 - aluno de graduacao\n"
+			System.out.print("1 - aluno de graduação\n"
 						   + "2 - aluno de mestrado\n"
 						   + "3 - aluno de doutorado\n"
 						   + "4 - professor\n"
