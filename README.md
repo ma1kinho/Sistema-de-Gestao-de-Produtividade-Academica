@@ -1,1 +1,5 @@
-# Sistema-de-Gest-o-de-Produtividade-Acad-mica
+# Sistema de Gestao de Produtividade Academica
+
+Projeto de Desenvolvimento OO da disciplina de Projeto de Software
+
+
