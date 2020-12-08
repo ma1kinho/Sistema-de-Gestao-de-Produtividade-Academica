@@ -3,7 +3,7 @@ Projeto de Desenvolvimento OO da disciplina de Projeto de Software
 ## Instruções de execução do sistemama:
 Digitar todas as informações sempre sem caracteres especiais ou acentos. Os nomes dos participantes sempre devem estar completos. Não pode haver mais de um projeto com o mesmo título. 
 ## Como funciona:
-#### Opção 0
+#### Opção 0 - Fechar o programa
 Termina a execução e fecha o programa.
 #### Opção 1 - Elaborar um projeto
 O status inicial de um projeto é "Em elaboração". Para começar a elaborar um projeto é necessário digitar todas as suas informações básicas. Projetos possuem
@@ -15,8 +15,12 @@ somente poderá ser alterado para “Concluído”.
 Para concluir um projeto é necessário existir publicações associadas a ele. Então, se não huver nenhuma publicação associada ao projeto, o status do projeto não poderá ser alterado de "Em andamento" para "Concluído".
 #### Opção 4 - Alocar um participante
 A alocação de participante só é permitida caso o projeto esteja "Em elaboração". Um estudante de graduação não pode participar de mais de dois projetos "Em andamento".
-#### Opção 5 - Criar uma publicacao
+#### Opção 5 - Criar uma publicação
+Uma publicação pode ser feita por um ou mais autores e é permitido que todos os colaboradores do laboratório tenham publicações. Uma publicação só poderá ser associada a um projeto quando o status do projeto estiver “Em andamento”. Uma publicação deve ter: título, nome da conferência onde foi publicada, ano de publicação e projeto de pesquisa associado (se houver).
 #### Opção 6 - Criar uma observacao
+As observações são feitas apenas por professores. Orientações devem ter: título, descrição, ano que a orientação foi produzida, quantidade de tarefas, tarefas a serem seguidas e projeto de pesquisa associado (se houver).
 #### Opção 7 - Consultar um colaborador
+Para consultar um colaborador é necessário que seja inserido seu nome completo. Caso a pessoa seja mesmo um colaborador do laborátorio de pesquisa, o sistema mostrará suas informações: nome, e-mail, um histórico contendo a lista de projetos e p
+colaborador participou,  
 #### Opção 8 - Consultar um projeto
 #### Opção 9 - Obter relatorio de producao academica do laboratorio
